@@ -29,5 +29,11 @@ module Habitz
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Don't generate helpers or assets with controllers
+    config.generators do |g|
+		  g.helper = false
+		  g.assets = false
+		end
   end
 end
