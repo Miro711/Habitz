@@ -1,0 +1,66 @@
+<%= form_with(model: habit, local: true) do |form| %>
+  <form>
+    <% if habit.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(habit.errors.count, "error") %> prohibited this habit from being saved:</h2>
+        <ul>
+          <% habit.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :name %>
+      <%= form.text_field :name, class: "form-control", placeholder: "Enter Name" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :description %>
+      <%= form.text_field :description, class: "form-control", placeholder: "Enter Description" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.select :type, [["With Yes or No each day", "binary"], ["With a threshold", "number"]] %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :threshold %>
+      <%= form.text_field :threshold, class: "form-control", placeholder: "Enter threshold" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :unit %>
+      <%= form.text_field :unit, class: "form-control", placeholder: "Enter unit" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.select :min_or_max, [["At least", "least"], ["At most", "most"]] %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :target_streak %>
+      <%= form.text_field :target_streak, class: "form-control", placeholder: "Enter target streak" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.select :frequency, ["daily", "weekly", "monthly", "yearly"] %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :number_of_days %>
+      <%= form.text_field :number_of_days, class: "form-control", placeholder: "Enter number of days" %>
+    </div>
+
+    <div class="form-group">
+        <%= form.label(:is_public, "Do you want to share your habit with public?") %>
+        <%= form.check_box :is_public %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "Save", class: "btn btn-primary"%>
+    </div>
+
+  </form>
+<% end %>
