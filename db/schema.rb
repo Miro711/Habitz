@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2019_04_05_055709) do
     t.bigint "user_id"
     t.string "name"
     t.text "description"
-    t.string "type"
+    t.string "habit_type"
     t.float "threshold"
     t.string "unit"
     t.string "min_or_max"

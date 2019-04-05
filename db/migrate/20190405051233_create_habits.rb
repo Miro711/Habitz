@@ -4,7 +4,7 @@ class CreateHabits < ActiveRecord::Migration[5.2]
       t.references :user, foreign_key: true
       t.string :name
       t.text :description
-      t.string :type
+      t.string :habit_type
       t.float :threshold
       t.string :unit
       t.string :min_or_max

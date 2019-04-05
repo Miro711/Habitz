@@ -13,10 +13,10 @@ class HabitsController < ApplicationController
     @habit.user = current_user
     respond_to do |format|
       if @habit.save
-        format.html { redirect_to @habit, notice: "Habit profile was successfully created" }
+        # format.html { redirect_to @habit, notice: "Habit profile was successfully created" }
         format.json { render :show, status: :created, location: @habit }
       else
-        format.html { render :new }
+        # format.html { render :new }
         format.json { render json: @habit.errors, status: :unprocessable_entity }
       end
     end
