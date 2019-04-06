@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_06_175644) do
+ActiveRecord::Schema.define(version: 2019_04_06_221743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,22 @@ ActiveRecord::Schema.define(version: 2019_04_06_175644) do
     t.index ["user_id"], name: "index_habits_on_user_id"
   end
 
+  create_table "tackled_habits", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "habit_id"
+    t.date "checkin_dates", default: [], array: true
+    t.float "checkin_values", default: [], array: true
+    t.boolean "is_reminder", default: false
+    t.integer "current_streak"
+    t.integer "maximum_streak"
+    t.integer "number_of_attempts"
+    t.float "success_percent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["habit_id"], name: "index_tackled_habits_on_habit_id"
+    t.index ["user_id"], name: "index_tackled_habits_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -44,4 +60,6 @@ ActiveRecord::Schema.define(version: 2019_04_06_175644) do
   end
 
   add_foreign_key "habits", "users"
+  add_foreign_key "tackled_habits", "habits"
+  add_foreign_key "tackled_habits", "users"
 end

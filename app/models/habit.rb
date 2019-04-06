@@ -1,6 +1,7 @@
 class Habit < ApplicationRecord
   
   belongs_to :user
+  has_many :tackled_habits, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :habit_type, presence: true, inclusion: {in: ["binary","number"]}
