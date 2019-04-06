@@ -10,6 +10,28 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <nav>
+        <%= link_to("Home", root_path) %>
+        <% if user_signed_in? %>
+          <span>Hello, <%= current_user.full_name %></span>
+          <%= link_to "Sign Out", session_path, method: :delete, data: {confirm: "Are you sure you want to sign out?"} %>
+        <% else %>
+          <%= link_to "Sign In", new_session_path %>
+          <%= link_to "Sign Up", new_user_path %>
+        <% end %>
+      </nav>
+      <% flash.each do |type, message| %>
+        <div class="alert alert-<%=flash_class(type)%> alert-dismissible fade show">
+          <%= message %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% end %>
+    </header>
+    <main class="container">
+      <%= yield %>
+    </main>
   </body>
 </html>
