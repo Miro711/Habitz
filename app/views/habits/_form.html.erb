@@ -17,12 +17,12 @@
   </div>
 
   <div class="form-group field">
-    <%= form.label :description %>
+    <%= form.label :description, "Description (optional)" %>
     <%= form.text_area :description, class: "form-control", placeholder: "Enter Description" %>
   </div>
 
   <div class="form-group field">
-    <%= form.label :habit_type %>
+    <%= form.label :habit_type, "Habit Type" %>
     <%= form.select :habit_type, [["With Yes or No each day", "binary"], ["With a threshold", "number"]] %>
   </div>
 
@@ -37,17 +37,17 @@
   </div>
 
   <div class="form-group field">
-    <%= form.label :min_or_max %>
+    <%= form.label :min_or_max, "Minimum/Maxium" %>
     <%= form.select :min_or_max, [["At least", "least"], ["At most", "most"]] %>
   </div>
 
   <div class="form-group field">
-    <%= form.label :target_streak %>
+    <%= form.label :target_streak, "Target Streak" %>
     <%= form.number_field :target_streak, class: "form-control", placeholder: "Enter target streak" %>
   </div>
 
   <div class="form-group field">
-    <%= form.label(:is_public, "Do you want to share your habit with public?") %>
+    <%= form.label(:is_public, "Do you want to challenge public with your habit?") %>
     <%= form.check_box :is_public %>
   </div>
 
@@ -57,7 +57,7 @@
   </div>
 
   <div class="form-group field">
-    <%= form.label :number_of_days %>
+    <%= form.label :number_of_days, "Number of Days Per Period" %>
     <%= form.number_field :number_of_days, class: "form-control", placeholder: "Enter number of days" %>
   </div>
 
