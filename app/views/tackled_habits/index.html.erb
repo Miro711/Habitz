@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tackled Habits</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Habit</th>
+      <th>Is reminder</th>
+      <th>Current streak</th>
+      <th>Maximum streak</th>
+      <th>Number of attempts</th>
+      <th>Success percent</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tackled_habits.each do |tackled_habit| %>
+      <tr>
+        <td><%= tackled_habit.user %></td>
+        <td><%= tackled_habit.habit %></td>
+        <td><%= tackled_habit.is_reminder %></td>
+        <td><%= tackled_habit.current_streak %></td>
+        <td><%= tackled_habit.maximum_streak %></td>
+        <td><%= tackled_habit.number_of_attempts %></td>
+        <td><%= tackled_habit.success_percent %></td>
+        <td><%= link_to 'Show', tackled_habit %></td>
+        <td><%= link_to 'Edit', edit_tackled_habit_path(tackled_habit) %></td>
+        <td><%= link_to 'Destroy', tackled_habit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Tackled Habit', new_tackled_habit_path %>

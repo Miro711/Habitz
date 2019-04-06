@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @tackled_habit.user %>
+</p>
+
+<p>
+  <strong>Habit:</strong>
+  <%= @tackled_habit.habit %>
+</p>
+
+<p>
+  <strong>Is reminder:</strong>
+  <%= @tackled_habit.is_reminder %>
+</p>
+
+<p>
+  <strong>Current streak:</strong>
+  <%= @tackled_habit.current_streak %>
+</p>
+
+<p>
+  <strong>Maximum streak:</strong>
+  <%= @tackled_habit.maximum_streak %>
+</p>
+
+<p>
+  <strong>Number of attempts:</strong>
+  <%= @tackled_habit.number_of_attempts %>
+</p>
+
+<p>
+  <strong>Success percent:</strong>
+  <%= @tackled_habit.success_percent %>
+</p>
+
+<%= link_to 'Edit', edit_tackled_habit_path(@tackled_habit) %> |
+<%= link_to 'Back', tackled_habits_path %>

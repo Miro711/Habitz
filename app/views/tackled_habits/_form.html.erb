@@ -1,0 +1,42 @@
+<%= form_with(model: tackled_habit, local: true) do |form| %>
+  <% if tackled_habit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(tackled_habit.errors.count, "error") %> prohibited this tackled_habit from being saved:</h2>
+
+      <ul>
+      <% tackled_habit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :is_reminder %>
+    <%= form.check_box :is_reminder %>
+  </div>
+
+  <div class="field">
+    <%= form.label :current_streak %>
+    <%= form.number_field :current_streak %>
+  </div>
+
+  <div class="field">
+    <%= form.label :maximum_streak %>
+    <%= form.number_field :maximum_streak %>
+  </div>
+
+  <div class="field">
+    <%= form.label :number_of_attempts %>
+    <%= form.number_field :number_of_attempts %>
+  </div>
+
+  <div class="field">
+    <%= form.label :success_percent %>
+    <%= form.text_field :success_percent %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

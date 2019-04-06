@@ -1,0 +1,67 @@
+<%= form_with(model: habit, local: true) do |form| %>
+  <% if habit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(habit.errors.count, "error") %> prohibited this habit from being saved:</h2>
+
+      <ul>
+      <% habit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :habit_type %>
+    <%= form.text_field :habit_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :threshold %>
+    <%= form.text_field :threshold %>
+  </div>
+
+  <div class="field">
+    <%= form.label :unit %>
+    <%= form.text_field :unit %>
+  </div>
+
+  <div class="field">
+    <%= form.label :min_or_max %>
+    <%= form.text_field :min_or_max %>
+  </div>
+
+  <div class="field">
+    <%= form.label :target_streak %>
+    <%= form.number_field :target_streak %>
+  </div>
+
+  <div class="field">
+    <%= form.label :is_public %>
+    <%= form.check_box :is_public %>
+  </div>
+
+  <div class="field">
+    <%= form.label :frequency %>
+    <%= form.text_field :frequency %>
+  </div>
+
+  <div class="field">
+    <%= form.label :number_of_days %>
+    <%= form.number_field :number_of_days %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
