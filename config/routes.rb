@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   
   get("/", to: "pages#home", as: :root)
 
+  resources :habits
+
   resources :users, only: [ :new, :create]
   
   resource :session, only: [ :new, :create, :destroy]

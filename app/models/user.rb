@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+
+    has_many :habits, dependent: :nullify
     
     has_secure_password
     

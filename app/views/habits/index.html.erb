@@ -1,0 +1,46 @@
+
+<h1>Habits</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Habit type</th>
+      <th>Threshold</th>
+      <th>Unit</th>
+      <th>Min or max</th>
+      <th>Target streak</th>
+      <th>Is public</th>
+      <th>Frequency</th>
+      <th>Number of days</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @habits.each do |habit| %>
+      <tr>
+        <td><%= habit.user&.full_name || 'DELETED' %></td>
+        <td><%= habit.name %></td>
+        <td><%= habit.description %></td>
+        <td><%= habit.habit_type %></td>
+        <td><%= habit.threshold %></td>
+        <td><%= habit.unit %></td>
+        <td><%= habit.min_or_max %></td>
+        <td><%= habit.target_streak %></td>
+        <td><%= habit.is_public %></td>
+        <td><%= habit.frequency %></td>
+        <td><%= habit.number_of_days %></td>
+        <td><%= link_to 'Show', habit %></td>
+        <td><%= link_to 'Edit', edit_habit_path(habit) %></td>
+        <td><%= link_to 'Destroy', habit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Habit', new_habit_path %>
