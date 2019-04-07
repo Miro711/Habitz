@@ -11,6 +11,8 @@ class HabitsController < ApplicationController
   # GET /habits/1
   # GET /habits/1.json
   def show
+    @tackled_habit = TackledHabit.new
+    @tackled_habits = @habit.tackled_habits.order(created_at: :desc)
   end
 
   # GET /habits/new

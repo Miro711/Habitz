@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   
   get("/", to: "pages#home", as: :root)
 
-  resources :habits
+  resources :habits do 
+    resources :tackled_habits, only: [:create, :destroy]
+  end
 
   resources :users, only: [ :new, :create]
   
