@@ -23,7 +23,7 @@
 </div>
 
 <section>
-  <h1>Checkins</h1>
+  <h1>Habit Checking</h1>
   <%= form_with(model: [@habit, @tackled_habit], local: true) do |form| %>
   <%# form_with url:  habit_tackled_habits_path(@habit) , local: true do |form| %>
     <% if @tackled_habit.errors.present? %>
@@ -33,12 +33,12 @@
     <% end %>
 
     <div class="form-group">
-      <%= form.label :checkin_date %>
+      <%= form.label :checkin_date, "Check-in Date" %>
       <%= form.date_field(:checkin_date, max: Date.today, placeholder: "Check-in Date", class: "form-control") %>
     </div>
 
     <div class="form-group">
-      <%= form.label :checkin_value %>
+      <%= form.label :checkin_value, "Check-in Value (Blank value for already checked-in day to undo a check-in)" %>
       <%= form.number_field(:checkin_value, step: :any, placeholder: "Check-in Value", class: "form-control") %>
     </div>
 
