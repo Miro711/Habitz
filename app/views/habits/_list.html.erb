@@ -35,6 +35,8 @@
         <% end %>
         <% if can?(:crud, habit) %>
           <td><%= link_to 'Edit', edit_habit_path(habit) %></td>
+        <% end %>
+        <% if can?(:destroy, habit) %>
           <td><%= link_to 'Destroy', habit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
       </tr>

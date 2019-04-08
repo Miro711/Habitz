@@ -1,13 +1,16 @@
 class HabitsController < ApplicationController
   before_action :authenticate_user!, except: [:index_public]
   before_action :set_habit, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_habit_crud!, only: [:destroy, :edit, :update]
+  before_action :authorize_habit_crud!, only: [:edit, :update]
   before_action :authorize_habit_show!, only: [:show]
+  before_action :authorize_habit_destroy!, only: [:destroy]
 
   # GET /habits
   # GET /habits.json
   def index
-    @habits = Habit.where(user_id: current_user.id)
+    @habits = Habit.where(user_id: current_user.id).to_a.concat(TackledHabit.where(user_id: current_user.id).select{|x| 
+                x.habit.user != current_user
+              }.map{|x| x.habit})
   end
 
   # GET /habits/1
@@ -88,6 +91,10 @@ class HabitsController < ApplicationController
 
     def authorize_habit_show!
       redirect_to root_path, alert: 'Access Denied' unless can? :show, @habit
+    end
+
+    def authorize_habit_destroy!
+      redirect_to root_path, alert: 'Access Denied' unless can? :destroy, @habit
     end
 
 end

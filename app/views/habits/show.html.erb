@@ -15,12 +15,14 @@
     <p><strong>Frequency: </strong><%= @habit.frequency %></p>
     <p><strong>Number of days: </strong><%= @habit.number_of_days %></p>
     <small>Created by: <%= @habit.user&.full_name || 'DELETED' %></small>
-    <% if can?(:crud, @habit) %>
-      <div class= "mb-3 mt-2">
+    <div class= "mb-3 mt-2">
+      <% if can?(:crud, @habit) %>
         <%= link_to 'Edit Habit Profile', edit_habit_path(@habit), class: "btn btn-primary" %> |
+      <% end %>
+      <% if can?(:destroy, @habit) %>
         <%= link_to 'Delete Habit Profile', habit_path(@habit), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-primary" %>
+      <% end %>
       </div>
-    <% end %>
   </div>
 </div>
 
@@ -62,7 +64,7 @@
             <%= tackled_habit.user&.full_name || 'DELETED' %>
             started tackling <%= @habit.name %> habit <%= time_ago_in_words(tackled_habit.created_at) %> ago
             •
-            <% if can?(:crud, tackled_habit) %>
+            <% if can?(:destroy, tackled_habit) %>
               <small>
                 <%=
                   link_to(

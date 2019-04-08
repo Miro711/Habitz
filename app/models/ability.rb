@@ -35,17 +35,23 @@ class Ability
       can :manage, :all
     end
 
-    alias_action :edit, :update, :destroy, to: :crud
+    alias_action :edit, :update, to: :crud
 
     can :crud, Habit do |habit|
       habit.user == user
     end
 
+    # Only owner of a habit can access the habit show page and tackle it or if habit is public
     can :show, Habit do |habit|
-      habit.user  == user || habit.is_public = true
+      habit.user == user || habit.is_public == true
     end
 
-    can :crud, TackledHabit  do |tackled_habit|
+    can :destroy, Habit do |habit|
+      habit.user == user && (habit.is_public == false || (habit.is_public == true && habit.tackled_habits.length < 1)) 
+    end
+
+    # Only tackler of a habit can delete its own tackle history
+    can :destroy, TackledHabit  do |tackled_habit|
       tackled_habit.user == user 
     end
 

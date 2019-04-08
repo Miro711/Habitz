@@ -23,7 +23,7 @@
 
   <div class="form-group field">
     <%= form.label :habit_type, "Habit Type" %>
-    <%= form.select :habit_type, [["With Yes or No each day", "binary"], ["With a threshold", "number"]] %>
+    <%= form.select :habit_type, [["With Yes or No each day", "Binary"], ["With a threshold", "Number"]] %>
   </div>
 
   <div class="form-group field">
@@ -38,11 +38,11 @@
 
   <div class="form-group field">
     <%= form.label :min_or_max, "Minimum/Maxium" %>
-    <%= form.select :min_or_max, [["At least", "least"], ["At most", "most"]] %>
+    <%= form.select :min_or_max, [["At least", "At least"], ["At most", "At most"]] %>
   </div>
 
   <div class="form-group field">
-    <%= form.label :target_streak, "Target Streak" %>
+    <%= form.label :target_streak, "Target Streak (days)" %>
     <%= form.number_field :target_streak, class: "form-control", placeholder: "Enter target streak" %>
   </div>
 
@@ -53,7 +53,7 @@
 
   <div class="form-group field">
     <%= form.label :frequency %>
-    <%= form.select :frequency, ["daily", "weekly", "monthly", "yearly"] %>
+    <%= form.select :frequency, ["Daily", "Weekly", "Monthly", "Yearly"] %>
   </div>
 
   <div class="form-group field">
