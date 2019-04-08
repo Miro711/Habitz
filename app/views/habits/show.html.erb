@@ -15,10 +15,12 @@
     <p><strong>Frequency: </strong><%= @habit.frequency %></p>
     <p><strong>Number of days: </strong><%= @habit.number_of_days %></p>
     <small>Created by: <%= @habit.user&.full_name || 'DELETED' %></small>
-    <div class= "mb-3 mt-2">
-      <%= link_to 'Edit Habit Profile', edit_habit_path(@habit), class: "btn btn-primary" %> |
-      <%= link_to 'Delete Habit Profile', habit_path(@habit), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-primary" %>
-    </div>
+    <% if can?(:crud, @habit) %>
+      <div class= "mb-3 mt-2">
+        <%= link_to 'Edit Habit Profile', edit_habit_path(@habit), class: "btn btn-primary" %> |
+        <%= link_to 'Delete Habit Profile', habit_path(@habit), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
 </div>
 
@@ -57,21 +59,23 @@
           <%= tackled_habit.checkin_dates %> <br>
           <%= tackled_habit.checkin_values %> <br>
           <small>
-            <%=
-              link_to(
-                "Delete",
-                habit_tackled_habit_path(@habit, tackled_habit),
-                method: :delete,
-                data: {
-                  confirm: "Are you sure?"
-                }
-              )
-            %>
-          </small>
-          •
-          <small>
             <%= tackled_habit.user&.full_name || 'DELETED' %>
             started tackling <%= @habit.name %> habit <%= time_ago_in_words(tackled_habit.created_at) %> ago
+            •
+            <% if can?(:crud, tackled_habit) %>
+              <small>
+                <%=
+                  link_to(
+                    "Delete",
+                    habit_tackled_habit_path(@habit, tackled_habit),
+                    method: :delete,
+                    data: {
+                      confirm: "Are you sure?"
+                    }
+                  )
+                %>
+              </small>
+            <% end %>
           </small>
         </p>
       </li>

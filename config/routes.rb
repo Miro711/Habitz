@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   
   get("/", to: "pages#home", as: :root)
 
+  get("/habits/index_public", to: "habits#index_public", as: :index_public)
   resources :habits do 
     resources :tackled_habits, only: [:create, :destroy]
   end

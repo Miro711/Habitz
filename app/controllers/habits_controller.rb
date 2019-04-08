@@ -1,11 +1,13 @@
 class HabitsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: [:index_public]
   before_action :set_habit, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_habit_crud!, only: [:destroy, :edit, :update]
+  before_action :authorize_habit_show!, only: [:show]
 
   # GET /habits
   # GET /habits.json
   def index
-    @habits = Habit.all
+    @habits = Habit.where(user_id: current_user.id)
   end
 
   # GET /habits/1
@@ -65,6 +67,10 @@ class HabitsController < ApplicationController
     end
   end
 
+  def index_public
+    @habits = Habit.where(is_public: true)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_habit
@@ -75,4 +81,13 @@ class HabitsController < ApplicationController
     def habit_params
       params.require(:habit).permit(:name, :description, :habit_type, :threshold, :unit, :min_or_max, :target_streak, :is_public, :frequency, :number_of_days)
     end
+
+    def authorize_habit_crud!
+      redirect_to root_path, alert: 'Access Denied' unless can? :crud, @habit
+    end
+
+    def authorize_habit_show!
+      redirect_to root_path, alert: 'Access Denied' unless can? :show, @habit
+    end
+
 end
