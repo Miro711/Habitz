@@ -59,7 +59,7 @@
       <li>
         <p>
           <%= tackled_habit.checkins.map{|x| Date.parse(x["checkin_date"])} %> <br>
-          <%= tackled_habit.checkins.map{|x| x["checkin_value"].presence} %> <br>
+          <%= tackled_habit.checkins.map{|x| x["checkin_value"]} %> <br>
           <small>
             <%= tackled_habit.user&.full_name || 'DELETED' %>
             started tackling <%= @habit.name %> habit <%= time_ago_in_words(tackled_habit.created_at) %> ago

@@ -12,15 +12,21 @@ class TackledHabitsController < ApplicationController
 
     checkin_date = tackled_habit_params["checkin_date"]
 
+    if tackled_habit_params["checkin_value"] == "" || tackled_habit_params["checkin_value"] == nil
+      parsed_checkin_value = nil
+    else
+      parsed_checkin_value = tackled_habit_params["checkin_value"].to_f
+    end
+    
     if @tackled_habit.checkins.any?{|x| x["checkin_date"] == checkin_date}
         duplicate_index = @tackled_habit.checkins.find_index{|x| x["checkin_date"] == checkin_date}
-        if tackled_habit_params["checkin_value"] != ""
-            @tackled_habit.checkins[duplicate_index]["checkin_value"] = tackled_habit_params["checkin_value"]
+        if parsed_checkin_value != nil
+            @tackled_habit.checkins[duplicate_index]["checkin_value"] = parsed_checkin_value
         else
             @tackled_habit.checkins.delete_at(duplicate_index)
         end
     else
-        @tackled_habit.checkins << {checkin_date: checkin_date, checkin_value: tackled_habit_params["checkin_value"]}
+        @tackled_habit.checkins << {checkin_date: checkin_date, checkin_value: parsed_checkin_value}
     end
 
     if @tackled_habit.save
