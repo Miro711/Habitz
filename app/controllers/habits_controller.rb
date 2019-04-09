@@ -8,9 +8,11 @@ class HabitsController < ApplicationController
   # GET /habits
   # GET /habits.json
   def index
-    @habits = Habit.where(user_id: current_user.id).to_a.concat(TackledHabit.where(user_id: current_user.id).select{|x| 
-                x.habit.user != current_user
-              }.map{|x| x.habit})
+    @habits = Habit.where(user_id: current_user.id).order(created_at: :desc).to_a.concat(
+                TackledHabit.where(user_id: current_user.id).order(created_at: :desc).select{|x| 
+                  x.habit.user != current_user
+                }.map{|x| x.habit}
+              )
   end
 
   # GET /habits/1
@@ -71,7 +73,7 @@ class HabitsController < ApplicationController
   end
 
   def index_public
-    @habits = Habit.where(is_public: true)
+    @habits = Habit.where(is_public: true).order(created_at: :desc)
   end
 
   private
