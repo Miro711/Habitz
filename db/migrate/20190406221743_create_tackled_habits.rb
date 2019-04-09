@@ -3,8 +3,7 @@ class CreateTackledHabits < ActiveRecord::Migration[5.2]
     create_table :tackled_habits do |t|
       t.references :user, foreign_key: true
       t.references :habit, foreign_key: true
-      t.date 'checkin_dates', array: true, default: []
-      t.float 'checkin_values', array: true, default: []
+      t.json :checkins, default: []
       t.boolean :is_reminder, default: false
       t.integer :current_streak
       t.integer :maximum_streak

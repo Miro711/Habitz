@@ -35,8 +35,7 @@ ActiveRecord::Schema.define(version: 2019_04_06_221743) do
   create_table "tackled_habits", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "habit_id"
-    t.date "checkin_dates", default: [], array: true
-    t.float "checkin_values", default: [], array: true
+    t.json "checkins", default: []
     t.boolean "is_reminder", default: false
     t.integer "current_streak"
     t.integer "maximum_streak"

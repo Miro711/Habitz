@@ -10,21 +10,18 @@ class TackledHabitsController < ApplicationController
     @tackled_habit.habit = @habit
     @tackled_habit.is_reminder = tackled_habit_params["is_reminder"]
 
-    parsed_checkin_date = Date.parse(tackled_habit_params["checkin_date"])
+    checkin_date = tackled_habit_params["checkin_date"]
 
-    if @tackled_habit.checkin_dates.include? parsed_checkin_date
-        duplicate_index = @tackled_habit.checkin_dates.find_index(parsed_checkin_date)
+    if @tackled_habit.checkins.any?{|x| x["checkin_date"] == checkin_date}
+        duplicate_index = @tackled_habit.checkins.find_index{|x| x["checkin_date"] == checkin_date}
         if tackled_habit_params["checkin_value"] != ""
-            @tackled_habit.checkin_values[duplicate_index] = tackled_habit_params["checkin_value"]
+            @tackled_habit.checkins[duplicate_index]["checkin_value"] = tackled_habit_params["checkin_value"]
         else
-            @tackled_habit.checkin_values.delete_at(duplicate_index)
-            @tackled_habit.checkin_dates.delete(parsed_checkin_date)
+            @tackled_habit.checkins.delete_at(duplicate_index)
         end
     else
-        @tackled_habit.checkin_dates << parsed_checkin_date
-        @tackled_habit.checkin_values << tackled_habit_params["checkin_value"]
+        @tackled_habit.checkins << {checkin_date: checkin_date, checkin_value: tackled_habit_params["checkin_value"]}
     end
-    # @tackled_habit.checkin_dates.sort! 
 
     if @tackled_habit.save
       redirect_to habit_url(@habit.id)
