@@ -23,7 +23,7 @@ class Api::V1::HabitsController < Api::ApplicationController
         habit = Habit.new(habit_params)
         habit.user = current_user
         habit.save!
-        render json: { id: habit.id, notice: 'Habit profile was successfully created.' }
+        render json: { id: habit.id, status: :ok, notice: 'Habit profile was successfully created.' }
         # format.json { render :show, status: :created, location: @habit, notice: 'Habit profile was successfully created.' }
         # render json: { errors: habit.errors }, status: 422
         # format.json { render json: @habit.errors, status: :unprocessable_entity }
@@ -33,6 +33,11 @@ class Api::V1::HabitsController < Api::ApplicationController
         habit.destroy
         render json: { status: 200 }, status: 200
         #render json: { head :no_content, notice: 'Habit profile was successfully destroyed.' }
+    end
+
+    def update
+        habit.update!(habit_params)
+        render json: { id: habit.id, status: :ok, notice: 'Habit profile was successfully updated.' }          
     end
 
     def index_public
