@@ -1,7 +1,7 @@
 class Api::V1::TackledHabitsController < Api::ApplicationController
 
     before_action :authenticate_user!
-    before_action :authorize_tackle_create!, only: [:create]
+    before_action :authorize_tackle_create!, only: [:create, :show]
     before_action :authorize_tackle_destroy!, only: [:destroy]
 
     def create
@@ -36,6 +36,10 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
       def destroy
         tackled_habit.destroy
         render json: { status: 200 }, status: 200
+      end
+
+      def show
+        render json: tackled_habit
       end
 
     private

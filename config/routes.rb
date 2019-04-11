@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       
       get("/habits/index_public", to: "habits#index_public", as: :index_public)
       resources :habits do
-        resources :tackled_habits, only: [:create, :destroy]
+        resources :tackled_habits, only: [:create, :destroy, :show]
       end
       
       resource :session, only: [:create, :destroy]
