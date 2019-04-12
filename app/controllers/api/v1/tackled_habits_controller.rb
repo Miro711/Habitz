@@ -27,7 +27,54 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
         else
             new_tackled_habit.checkins << {checkin_date: checkin_date, checkin_value: parsed_checkin_value}
         end
-    
+
+        new_tackled_habit.save!
+
+        new_tackled_habit.checkins.sort_by!{|checkin| checkin["checkin_date"]}.reverse!
+        
+        if habit.habit_type == 'Binary'
+            if new_tackled_habit.checkins.length == 1
+                new_tackled_habit.current_streak = 1
+                # new_tackled_habit.maximum_streak = 1
+            else
+                new_tackled_habit.current_streak = 1
+                for index in 0..(new_tackled_habit.checkins.length-2)
+                    if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
+                        # new_tackled_habit.current_streak = 0
+                        # break
+                    else
+                        new_tackled_habit.current_streak += 1
+                    end
+                end
+            end
+            new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
+            # new_tackled_habit.maximum_streak = new_tackled_habit.current_streak if new_tackled_habit.current_streak > new_tackled_habit.maximum_streak
+        elsif habit.habit_type == 'Number' && habit.min_or_max == 'At least'
+            if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] >= habit.threshold
+                new_tackled_habit.current_streak = 1
+            else
+                new_tackled_habit.current_streak = 1
+                for index in 0..(new_tackled_habit.checkins.length-2)
+                    if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] >= habit.threshold ) && ( new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold ) 
+                        new_tackled_habit.current_streak += 1
+                    end
+                end
+            end
+            new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
+        elsif habit.habit_type == 'Number' && habit.min_or_max == 'At most'
+            if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] <= habit.threshold
+                new_tackled_habit.current_streak = 1
+            else
+                new_tackled_habit.current_streak = 1
+                for index in 0..(new_tackled_habit.checkins.length-2)
+                    if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] <= habit.threshold ) && ( new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold ) 
+                        new_tackled_habit.current_streak += 1
+                    end
+                end
+            end
+            new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
+        end
+        
         new_tackled_habit.save!
         render json: {id: new_tackled_habit.id}
         
