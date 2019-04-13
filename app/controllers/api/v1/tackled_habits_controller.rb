@@ -21,11 +21,24 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
             duplicate_index = new_tackled_habit.checkins.find_index{|x| x["checkin_date"] == checkin_date}
             if parsed_checkin_value != nil
                 new_tackled_habit.checkins[duplicate_index]["checkin_value"] = parsed_checkin_value
+                if habit.habit_type == 'Number' && habit.min_or_max == 'At least' && parsed_checkin_value >= habit.threshold
+                    new_tackled_habit.checkins[duplicate_index]["is_win"] = true
+                elsif habit.habit_type == 'Number' && habit.min_or_max == 'At most' && parsed_checkin_value <= habit.threshold
+                    new_tackled_habit.checkins[duplicate_index]["is_win"] = true
+                elsif habit.habit_type == 'Binary' 
+                    new_tackled_habit.checkins[duplicate_index]["is_win"] = true
+                else 
+                    new_tackled_habit.checkins[duplicate_index]["is_win"] = false
+                end
             else
                 new_tackled_habit.checkins.delete_at(duplicate_index)
             end
         else
-            new_tackled_habit.checkins << {checkin_date: checkin_date, checkin_value: parsed_checkin_value}
+            status = false
+            status = true if habit.habit_type == 'Binary'
+            status = true if habit.habit_type == 'Number' && habit.min_or_max == 'At least' && parsed_checkin_value >= habit.threshold
+            status = true if habit.habit_type == 'Number' && habit.min_or_max == 'At most' && parsed_checkin_value <= habit.threshold
+            new_tackled_habit.checkins << {checkin_date: checkin_date, checkin_value: parsed_checkin_value, is_win: status}
         end
 
         new_tackled_habit.save!
@@ -41,7 +54,7 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
                 for index in 0..(new_tackled_habit.checkins.length-2)
                     if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
                         # new_tackled_habit.current_streak = 0
-                        # break
+                        break
                     else
                         new_tackled_habit.current_streak += 1
                     end
@@ -53,11 +66,21 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
             if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] >= habit.threshold
                 new_tackled_habit.current_streak = 1
             else
-                new_tackled_habit.current_streak = 1
+                new_tackled_habit.current_streak = 1 if new_tackled_habit.checkins[0]["checkin_value"] >= habit.threshold
+                new_tackled_habit.current_streak = 0 if new_tackled_habit.checkins[0]["checkin_value"] < habit.threshold
                 for index in 0..(new_tackled_habit.checkins.length-2)
-                    if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] >= habit.threshold ) && ( new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold ) 
-                        new_tackled_habit.current_streak += 1
+                    if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
+                        # new_tackled_habit.current_streak = 0
+                        break
+                    else
+                        new_tackled_habit.current_streak += 1 if new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold
+                        break if new_tackled_habit.checkins[index+1]["checkin_value"] < habit.threshold
                     end
+                    # if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] >= habit.threshold ) #&& ( new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold ) 
+                    #     new_tackled_habit.current_streak += 1
+                    # else
+                    #     break
+                    # end
                 end
             end
             new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
@@ -65,11 +88,19 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
             if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] <= habit.threshold
                 new_tackled_habit.current_streak = 1
             else
-                new_tackled_habit.current_streak = 1
+                new_tackled_habit.current_streak = 1 if new_tackled_habit.checkins[0]["checkin_value"] <= habit.threshold
+                new_tackled_habit.current_streak = 0 if new_tackled_habit.checkins[0]["checkin_value"] > habit.threshold
                 for index in 0..(new_tackled_habit.checkins.length-2)
-                    if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] <= habit.threshold ) && ( new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold ) 
-                        new_tackled_habit.current_streak += 1
+                    if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
+                        # new_tackled_habit.current_streak = 0
+                        break
+                    else
+                        new_tackled_habit.current_streak += 1 if new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold
+                        break if new_tackled_habit.checkins[index+1]["checkin_value"] > habit.threshold
                     end
+                    # if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] <= habit.threshold ) #&& ( new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold ) 
+                    #     new_tackled_habit.current_streak += 1
+                    # end
                 end
             end
             new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
