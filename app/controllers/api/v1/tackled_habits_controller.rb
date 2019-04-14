@@ -45,66 +45,69 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
 
         new_tackled_habit.wins = new_tackled_habit.checkins.select {|checkin| checkin["is_win"] == true}.count
         new_tackled_habit.checkins.sort_by!{|checkin| checkin["checkin_date"]}.reverse!
-        
-        if habit.habit_type == 'Binary'
-            if new_tackled_habit.checkins.length == 1
-                new_tackled_habit.current_streak = 1
-                # new_tackled_habit.maximum_streak = 1
-            else
-                new_tackled_habit.current_streak = 1
-                for index in 0..(new_tackled_habit.checkins.length-2)
-                    if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
-                        # new_tackled_habit.current_streak = 0
-                        break
-                    else
-                        new_tackled_habit.current_streak += 1
+        if new_tackled_habit.checkins.length == 0
+            new_tackled_habit.current_streak = 0
+        else
+            if habit.habit_type == 'Binary'
+                if new_tackled_habit.checkins.length == 1
+                    new_tackled_habit.current_streak = 1
+                    # new_tackled_habit.maximum_streak = 1
+                else
+                    new_tackled_habit.current_streak = 1
+                    for index in 0..(new_tackled_habit.checkins.length-2)
+                        if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
+                            # new_tackled_habit.current_streak = 0
+                            break
+                        else
+                            new_tackled_habit.current_streak += 1
+                        end
                     end
                 end
-            end
-            new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
-            # new_tackled_habit.maximum_streak = new_tackled_habit.current_streak if new_tackled_habit.current_streak > new_tackled_habit.maximum_streak
-        elsif habit.habit_type == 'Number' && habit.min_or_max == 'At least'
-            if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] >= habit.threshold
-                new_tackled_habit.current_streak = 1
-            else
-                new_tackled_habit.current_streak = 1 if new_tackled_habit.checkins[0]["checkin_value"] >= habit.threshold
-                new_tackled_habit.current_streak = 0 if new_tackled_habit.checkins[0]["checkin_value"] < habit.threshold
-                for index in 0..(new_tackled_habit.checkins.length-2)
-                    if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
-                        # new_tackled_habit.current_streak = 0
-                        break
-                    else
-                        new_tackled_habit.current_streak += 1 if new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold
-                        break if new_tackled_habit.checkins[index+1]["checkin_value"] < habit.threshold
+                new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
+                # new_tackled_habit.maximum_streak = new_tackled_habit.current_streak if new_tackled_habit.current_streak > new_tackled_habit.maximum_streak
+            elsif habit.habit_type == 'Number' && habit.min_or_max == 'At least'
+                if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] >= habit.threshold
+                    new_tackled_habit.current_streak = 1
+                else
+                    new_tackled_habit.current_streak = 1 if new_tackled_habit.checkins[0]["checkin_value"] >= habit.threshold
+                    new_tackled_habit.current_streak = 0 if new_tackled_habit.checkins[0]["checkin_value"] < habit.threshold
+                    for index in 0..(new_tackled_habit.checkins.length-2)
+                        if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
+                            # new_tackled_habit.current_streak = 0
+                            break
+                        else
+                            new_tackled_habit.current_streak += 1 if new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold
+                            break if new_tackled_habit.checkins[index+1]["checkin_value"] < habit.threshold
+                        end
+                        # if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] >= habit.threshold ) #&& ( new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold ) 
+                        #     new_tackled_habit.current_streak += 1
+                        # else
+                        #     break
+                        # end
                     end
-                    # if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] >= habit.threshold ) #&& ( new_tackled_habit.checkins[index+1]["checkin_value"] >= habit.threshold ) 
-                    #     new_tackled_habit.current_streak += 1
-                    # else
-                    #     break
-                    # end
                 end
-            end
-            new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
-        elsif habit.habit_type == 'Number' && habit.min_or_max == 'At most'
-            if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] <= habit.threshold
-                new_tackled_habit.current_streak = 1
-            else
-                new_tackled_habit.current_streak = 1 if new_tackled_habit.checkins[0]["checkin_value"] <= habit.threshold
-                new_tackled_habit.current_streak = 0 if new_tackled_habit.checkins[0]["checkin_value"] > habit.threshold
-                for index in 0..(new_tackled_habit.checkins.length-2)
-                    if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
-                        # new_tackled_habit.current_streak = 0
-                        break
-                    else
-                        new_tackled_habit.current_streak += 1 if new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold
-                        break if new_tackled_habit.checkins[index+1]["checkin_value"] > habit.threshold
+                new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
+            elsif habit.habit_type == 'Number' && habit.min_or_max == 'At most'
+                if new_tackled_habit.checkins.length == 1 && new_tackled_habit.checkins[0]["checkin_value"] <= habit.threshold
+                    new_tackled_habit.current_streak = 1
+                else
+                    new_tackled_habit.current_streak = 1 if new_tackled_habit.checkins[0]["checkin_value"] <= habit.threshold
+                    new_tackled_habit.current_streak = 0 if new_tackled_habit.checkins[0]["checkin_value"] > habit.threshold
+                    for index in 0..(new_tackled_habit.checkins.length-2)
+                        if Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"]) > 1
+                            # new_tackled_habit.current_streak = 0
+                            break
+                        else
+                            new_tackled_habit.current_streak += 1 if new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold
+                            break if new_tackled_habit.checkins[index+1]["checkin_value"] > habit.threshold
+                        end
+                        # if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] <= habit.threshold ) #&& ( new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold ) 
+                        #     new_tackled_habit.current_streak += 1
+                        # end
                     end
-                    # if (Date.parse(new_tackled_habit.checkins[index]["checkin_date"]) - Date.parse(new_tackled_habit.checkins[index+1]["checkin_date"])) <= 1 && ( new_tackled_habit.checkins[index]["checkin_value"] <= habit.threshold ) #&& ( new_tackled_habit.checkins[index+1]["checkin_value"] <= habit.threshold ) 
-                    #     new_tackled_habit.current_streak += 1
-                    # end
                 end
+                new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
             end
-            new_tackled_habit.current_streak = 0 if Date.today - Date.parse(new_tackled_habit.checkins[0]["checkin_date"]) > 1
         end
         
         new_tackled_habit.save!
