@@ -25,8 +25,6 @@ ActiveRecord::Schema.define(version: 2019_04_06_221743) do
     t.string "min_or_max"
     t.integer "target_streak"
     t.boolean "is_public", default: false
-    t.string "frequency"
-    t.integer "number_of_days"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_habits_on_user_id"
@@ -38,9 +36,7 @@ ActiveRecord::Schema.define(version: 2019_04_06_221743) do
     t.json "checkins", default: []
     t.boolean "is_reminder", default: false
     t.integer "current_streak"
-    t.integer "maximum_streak"
-    t.integer "number_of_attempts"
-    t.float "success_percent"
+    t.integer "wins"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["habit_id"], name: "index_tackled_habits_on_habit_id"

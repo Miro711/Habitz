@@ -9,10 +9,10 @@ class HabitSerializer < ActiveModel::Serializer
     :min_or_max,
     :target_streak,
     :is_public,
-    :frequency,
-    :number_of_days,
     :created_at,
     :updated_at
+    # :frequency,
+    # :number_of_days,
   )
 
   belongs_to :user, key: :habit_owner

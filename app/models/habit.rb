@@ -3,8 +3,8 @@ class Habit < ApplicationRecord
   belongs_to :user
   has_many :tackled_habits, dependent: :destroy
 
-  before_validation(:set_default_frequency)
-  before_validation(:set_default_number_of_days)
+  # before_validation(:set_default_frequency)
+  # before_validation(:set_default_number_of_days)
 
   validates :name, presence: true, uniqueness: true
   validates :habit_type, presence: true, inclusion: {in: ["Binary","Number"]}
@@ -16,12 +16,12 @@ class Habit < ApplicationRecord
 
   private 
 
-  def set_default_frequency
-    self.frequency ||= 'daily'
-  end
+  # def set_default_frequency
+  #   self.frequency ||= 'daily'
+  # end
 
-  def set_default_number_of_days
-    self.number_of_days ||= 1
-  end
+  # def set_default_number_of_days
+  #   self.number_of_days ||= 1
+  # end
 
 end

@@ -10,8 +10,8 @@ class CreateHabits < ActiveRecord::Migration[5.2]
       t.string :min_or_max
       t.integer :target_streak
       t.boolean :is_public, default: false
-      t.string :frequency
-      t.integer :number_of_days
+      #t.string :frequency
+      #t.integer :number_of_days
 
       t.timestamps
     end
