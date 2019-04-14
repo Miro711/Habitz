@@ -52,7 +52,7 @@ class Api::V1::HabitsController < Api::ApplicationController
     end
 
     def habit_params
-        params.permit(:name, :description, :habit_type, :threshold, :unit, :min_or_max, :target_streak, :is_public, :frequency, :number_of_days)
+        params.permit(:name, :description, :habit_type, :threshold, :unit, :min_or_max, :target_streak, :is_public)#, :frequency, :number_of_days)
     end
 
     def authorize_habit_crud!

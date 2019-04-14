@@ -43,6 +43,7 @@ class Api::V1::TackledHabitsController < Api::ApplicationController
 
         new_tackled_habit.save!
 
+        new_tackled_habit.wins = new_tackled_habit.checkins.select {|checkin| checkin["is_win"] == true}.count
         new_tackled_habit.checkins.sort_by!{|checkin| checkin["checkin_date"]}.reverse!
         
         if habit.habit_type == 'Binary'
