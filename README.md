@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Deployment
+This app is in the process of being deployed on Heroku!
 
-Things you may want to cover:
+# SUMMARY
+Habitz is a habit tracker app that helps achieve personal goals towards growing good habits and
+breaking bad habits. With Habitz, one can shape up daily goals, log in habit activity, visualize the progress
+onto calendar & time series graphs and challenge others with their habit for inspiration
 
-* Ruby version
+# TECHNOLOGIES and LANGUAGES
+Ruby, Rails, API, PostgreSQL
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# REACT FRONT-END
+Please go to habitz_client github repo
